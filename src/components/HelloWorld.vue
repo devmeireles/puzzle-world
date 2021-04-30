@@ -1,14 +1,16 @@
 <template>
-  <div class="hello">
-    <h1>{{ currentGame.definition }}</h1>
-    <Input :word="currentGame.word" v-if="currentGame.word"/>
-  </div>
+  <v-container>
+    <div class="hello">
+      <h1>{{ currentGame.definition }}</h1>
+      <Input :word="currentGame.word" v-if="currentGame.word" />
+    </div>
+  </v-container>
 </template>
 
 <script>
 import Input from "./Input";
 import axios from "axios";
-import randomWords from 'random-words';
+import randomWords from "random-words";
 export default {
   name: "HelloWorld",
   components: {
