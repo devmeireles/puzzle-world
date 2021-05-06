@@ -5,8 +5,9 @@
       maxlength="1"
       v-for="(item, i) in wordArr"
       :key="i"
-      :class="`input-${i}`"
+      :class="`input-${i}-${position}`"
       :id="i"
+      data-id=""
     />
   </div>
 </template>
@@ -19,6 +20,10 @@ export default {
       type: String,
       required: true,
       default: "",
+    },
+    position: {
+      type: Number,
+      required: true,
     },
   },
   data() {
@@ -68,11 +73,14 @@ export default {
     checkWord() {
       let answerWord = "";
       for (var i = 0; i < this.word.length; i++) {
-        answerWord += document.getElementsByClassName(`input-${i}`)[0].value;
+        answerWord += document.getElementsByClassName(
+          `input-${i}-${this.position}`
+        )[0].value;
       }
 
       if (answerWord === this.word) {
         console.log("yes");
+        this.$root.$emit("moveTab", this.position + 1);
       }
     },
   },

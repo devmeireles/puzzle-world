@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-main>
-      <Game v-if="!loading" :words="words" />
+      <Game v-if="!loading" :words="words" :game-size="gameSize" />
       <Loading v-else />
     </v-main>
   </v-app>
@@ -11,6 +11,7 @@
 import Game from "./views/Game";
 import Loading from "./components/ui/Loading";
 import randomWords from "random-words";
+import faker from 'faker';
 
 export default {
   name: "App",
@@ -24,6 +25,7 @@ export default {
     return {
       loading: true,
       words: [],
+      gameSize: 3
     };
   },
 
@@ -32,8 +34,9 @@ export default {
   },
   methods: {
     async getWordList() {
+      faker.locale = "pt_BR";
       this.loading = true;
-      this.words = await randomWords(2);
+      this.words = await randomWords(this.gameSize);
       this.loading = false;
     },
   },

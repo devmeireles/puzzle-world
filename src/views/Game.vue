@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <div v-if="!loading">
+    <div>
       <v-tabs v-model="tab" align-with-title v-if="words">
         <v-tabs-slider color="yellow"></v-tabs-slider>
 
@@ -10,17 +10,21 @@
       </v-tabs>
 
       <v-tabs-items v-model="tab">
-        <v-tab-item v-for="item in words" :key="item">
-          <v-card flat>
-            <v-card-text>
+        <v-tab-item v-for="(item, i) in words" :key="item">
+          <v-card flat class="d-flex justify-center align-center">
+            <v-card-text v-if="!loading">
               <h1>{{ currentGame.definition }}</h1>
-              <Input :word="currentGame.word" v-if="currentGame.word" />
+              <Input
+                :word="currentGame.word"
+                :position="i"
+                v-if="currentGame.word"
+              />
             </v-card-text>
+            <Loading v-else />
           </v-card>
         </v-tab-item>
       </v-tabs-items>
     </div>
-    <Loading v-else />
   </v-container>
 </template>
 
@@ -35,8 +39,14 @@ export default {
     Loading,
   },
   props: {
-    words: Array,
-    default: () => [],
+    words: {
+      type: Array,
+      default: () => [],
+    },
+    gameSize: {
+      type: Number,
+      required: true,
+    },
   },
   data() {
     return {
@@ -51,6 +61,12 @@ export default {
   },
   created() {
     this.getWord(this.words[0]);
+    this.$root.$on("moveTab", (position) => {
+      if (position < this.gameSize) {
+        this.getWord(this.words[position]);
+        this.tab = position;
+      }
+    });
   },
   methods: {
     changeTab(item) {
@@ -78,3 +94,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.v-card {
+  min-height: 300px;
+}
+</style>
